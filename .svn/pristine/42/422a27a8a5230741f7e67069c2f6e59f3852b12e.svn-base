@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- 指定接口文件位置 -->
+<mapper namespace="com.etc.dao.PlayerMapper">
+<!-- 弹幕 -->
+	<resultMap type="com.etc.entity.Danmu" id="foralldm">
+	<id property="danmuId" column="danmuId"/>
+	<result property="movieId" column="movieId"/>
+	<result property="word" column="word"/>
+	<result property="color" column="color"/>
+	<result property="speed" column="speed"/>
+	<result property="top" column="top"/>
+	<result property="fontSize" column="fontSize"/>
+	<result property="action" column="action"/>
+	<result property="time" column="time"/>
+	<result property="movieName" column="movieName"/>
+	</resultMap>
+	 
+<!--  电影-->
+ <resultMap id="resultMapForMovie" type="com.etc.entity.Movie">
+    <id property="movieId" column="movieId"/>
+    <result property="movieName" column="movieName"/>
+    <result property="directorId" column="directorId"/>
+    <result property="typeId" column="typeId"/>
+    <result property="datetime" column="datetime"/>
+    <result property="movieScore" column="movieScore"/>
+    <result property="movieIntroduction" column="movieIntroduction"/>
+    <result property="movieImg" column="movieImg"/>
+    <result property="movieTime" column="movieTime"/>
+    <result property="movieStatus" column="movieStatus"/>
+    <result property="areaId" column="areaId"/>
+    <result property="movieUrl" column="movieUrl"/>
+     <result property="directorName" column="directorName"/>
+      <result property="typeName" column="typeName"/>
+       <result property="areaName" column="areaName"/>
+    
+</resultMap>
+
+<!--  评论 -->
+<resultMap type="com.etc.entity.Comment" id="resultMapForComment">
+ 	<id property="commentId" column="commentId"/>
+    <result property="userId" column="userId"/>
+    <result property="movieId" column="movieId"/>
+    <result property="commentContent" column="commentContent"/>
+    <result property="commentTime" column="commentTime"/>
+</resultMap>
+
+<!--  评论 -->
+<resultMap type="com.etc.entity.Comment" id="resultMapForCommentAll">
+	<id property="commentId" column="commentId"/>
+  
+	<result property="commentContent" column="commentContent"/>
+    <result property="commentTime" column="commentTime"/>
+    
+    <result property="directorName" column="directorName"/>
+	<result property="typeName" column="typeName"/>
+	<result property="areaName" column="areaName"/>
+	<association property="movie" javaType="com.etc.entity.Movie">
+		<id property="movieId" column="movieId"/>
+    	<result property="movieName" column="movieName"/>
+    	<result property="directorId" column="directorId"/>
+    	<result property="typeId" column="typeId"/>
+    	<result property="datetime" column="datetime"/>
+   	 	<result property="movieScore" column="movieScore"/>
+    	<result property="movieIntroduction" column="movieIntroduction"/>
+    	<result property="movieImg" column="movieImg"/>
+    	<result property="movieTime" column="movieTime"/>
+    	<result property="movieStatus" column="movieStatus"/>
+    	<result property="areaId" column="areaId"/>
+    	<result property="movieUrl" column="movieUrl"/>
+	</association>
+	<association property="users" javaType="com.etc.entity.Users">
+		<id  property="userId" column="userId"/>
+		<result property="userImg" column="userImg"/>
+		<result property="userName" column="userName"/>
+		<result property="userPwd" column="userPwd"/>
+		<result property="userNickname" column="userNickname"/>
+		<result property="userSex" column="userSex"/>
+		<result property="userStatus" column="userStatus"/>
+		<result property="vipTime" column="vipTime"/>
+	</association>
+</resultMap>
+	<resultMap type="com.etc.entity.Movie" id="movieresult">
+		<id property="movieId" column="movieId"/>
+    	<result property="movieName" column="movieName"/>
+    	<result property="movieImg" column="movieImg"/>
+		<result property="directorName" column="directorName"/>
+	
+	</resultMap>
+
+<!-- 获取弹幕 -->
+	<select id="getAllDm" resultMap="foralldm">
+		select danmu.*,movie.movieName from danmu inner join movie on danmu.movieId=movie.movieId where danmu.movieId=#{mid}
+	</select>
+<!-- 添加弹幕 -->
+	<insert id="addDm">
+	insert into danmu values(null,#{movieId},#{word},#{color},#{speed},#{top},#{fontSize},#{action},#{time})
+	</insert>
+
+	<select id="getMovie" resultMap="resultMapForMovie">
+	select movie.*,director.directorName,type.typeName,area.areaName from movie inner join director on movie.directorId=director.directorId inner join type on movie.typeId=type.typeId inner join area on movie.areaId=area.areaId where movieId=#{mid}
+	</select>
+	
+	<select id="getComment" resultMap="resultMapForCommentAll">
+	select 
+	comments.commentId,comments.commentContent,comments.commentTime,movie.*,director.directorName,type.typeName,area.areaName,area.areaLanuage,users.* 
+	from comments inner join users on comments.userId=users.userId 
+	inner join movie on comments.movieId=movie.movieId 
+	INNER JOIN director on movie.directorId=director.directorId 
+	INNER JOIN type on type.typeId=movie.typeId INNER JOIN area on area.areaId=movie.areaId 
+	where comments.movieId=#{mid} GROUP BY commentTime DESC
+	</select>
+	<insert id="addComment">
+	insert into comments values(null,#{userId},#{movieId},#{commentContent},now())
+	
+	</insert>
+	<select id="getMovies" resultMap="movieresult">
+	
+select movie.movieId,movie.movieName,movie.movieImg,director.directorName from movie inner join director group by datetime desc  LIMIT 0,4
+	</select>
+</mapper>

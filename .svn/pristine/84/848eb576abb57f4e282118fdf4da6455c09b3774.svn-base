@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- 指定接口文件位置 -->
+<mapper namespace="com.etc.dao.AdminDao">
+   <!--  用户 -->
+ <resultMap id="resultMapForUser" type="com.etc.entity.Users">
+    <id property="userId" column="userId"/>
+    <result property="userImg" column="userImg"/>
+    <result property="userName" column="userName"/>
+    <result property="userPwd" column="userPwd"/>
+   <result property="userNickname" column="userNickname"/>
+   <result property="userSex" column="userSex"/>
+   <result property="userStatus" column="userStatus"/>
+   <result property="vipTime" column="vipTime"/>
+</resultMap>
+
+ <select id="queryAllUsers" resultMap="resultMapForUser">
+    select * from users
+ </select>
+ 
+ <select id="queryUsersByLike" resultMap="resultMapForUser">
+    select * from users where userName like  "%"#{userName}"%"
+ </select>
+ 
+ <select id="queryUser" resultMap="resultMapForUser">
+    select * from users where userId=#{userId}
+ </select>
+ 
+ <insert id="addUser">
+ 	insert into users values(null,#{userImg},#{userName},#{userPwd},#{userNickname},#{userSex},#{userStatus},#{vipTime})
+ </insert>
+ 
+ <delete id="deleUsers">
+ delete from users where userId=#{userId}
+ </delete>
+ <update id="updateUsers">
+ update users set userImg=#{userImg}, userName=#{userName} ,userPwd=#{userPwd}, userNickname=#{userNickname}, userSex=#{userSex}, userStatus=#{userStatus}, vipTime=#{vipTime} where userId=#{userId}
+ </update>
+    <!--  管理员 -->
+ <resultMap id="resultMapForAdmin" type="com.etc.entity.Admin">
+    <id property="adminId" column="adminId"/>
+    <result property="adminName" column="adminName"/>
+    <result property="adminPwd" column="adminPwd"/>
+   
+</resultMap>
+
+ <select id="queryAllAdmin" resultMap="resultMapForAdmin">
+    select * from admin
+ </select>
+ <!-- 管理员登录 -->
+ <select id="adminLogin" resultMap="resultMapForAdmin">
+    select * from admin where adminName=#{adminName} and adminPwd=#{adminPwd}
+ </select>
+ 
+ 
+ <delete id="deleAdmin">
+ delete from admin where adminId=#{adminId}
+ </delete>
+ <update id="updateAdmin">
+ update admin set adminName=#{adminName} , adminPwd=#{adminPwd} where adminId=#{adminId}
+ </update>
+    <!--  电影表 -->
+ <resultMap id="resultMapForMovie" type="com.etc.entity.Movie">
+    <id property="movieId" column="movieId"/>
+    <result property="movieName" column="movieName"/>
+    <result property="directorId" column="directorId"/>
+     <result property="typeId" column="typeId"/>
+    <result property="datetime" column="datetime"/>
+   <result property="movieScore" column="movieScore"/>
+   <result property="movieIntroduction" column="movieIntroduction"/>
+   <result property="movieImg" column="movieImg"/>
+   <result property="movieTime" column="movieTime"/>
+    <result property="movieStatus" column="movieStatus"/>
+     <result property="areaId" column="areaId"/>
+   <result property="movieUrl" column="movieUrl"/>
+</resultMap>
+ <select id="queryAllMovie" resultMap="resultMapForMovie">
+    select * from movie
+ </select>
+ 
+ <select id="queryMovieLike" resultMap="resultMapForMovie">
+    select * from movie where movieName like "%"#{movieName}"%"
+ </select>
+ 
+ <select id="queryMovieById" resultMap="resultMapForMovie">
+    select * from movie where movieId=#{movieId}
+ </select>
+ 
+ <delete id="deleMovie">
+ delete from movie where movieId=#{movieId}
+ </delete>
+ <update id="updateMovie">
+ update movie set movieName=#{movieName},directorId=#{directorId},typeId=#{typeId},datetime=#{datetime},movieScore=#{movieScore},movieIntroduction=#{movieIntroduction},movieImg=#{movieImg},movieTime=#{movieTime},movieStatus=#{movieStatus},areaId=#{areaId},movieUrl=#{movieUrl} where movieId=#{movieId}
+ </update>
+  <insert id="addMovie">
+ insert into movie values(null,#{movieName},#{directorId},#{typeId},#{datetime},#{movieScore},#{movieIntroduction},#{movieImg},#{movieTime},#{movieStatus},#{areaId},#{movieUrl})
+ </insert>
+    <!--  主演 -->
+  <resultMap id="resultMapForActor" type="com.etc.entity.Actor">
+    <id property="actorId" column="actorId"/>
+    <result property="actorName" column="actorName"/>
+    <result property="actorImg" column="actorImg"/>
+</resultMap>
+ <select id="queryAllActor" resultMap="resultMapForActor">
+    select * from actor
+ </select>
+ <select id="queryActorLike" resultMap="resultMapForActor">
+    select * from actor where actorName like "%"#{actorName}"%"
+ </select>
+ <select id="queryActorById" resultMap="resultMapForActor">
+    select * from actor where actorId=#{actorId}
+ </select>
+ <delete id="deleActor">
+ delete from actor where actorId=#{actorId}
+ </delete>
+ <update id="updateActor">
+ update actor set actorName=#{actorName},actorImg=#{actorImg} where actorId=#{actorId}
+ </update>
+  <insert id="addActor">
+ insert into actor values(null,#{actorName},#{actorImg})
+ </insert>
+    <!--  地区 -->
+   <resultMap id="resultMapForArea" type="com.etc.entity.Area">
+    <id property="areaId" column="areaId"/>
+    <result property="areaName" column="areaName"/>
+    <result property="areaLanuage" column="areaLanuage"/>
+</resultMap>
+ <select id="queryAllArea" resultMap="resultMapForArea">
+    select * from area
+ </select>
+ <select id="queryAreaById" resultMap="resultMapForArea">
+    select * from area where areaId=#{areaId}
+ </select>
+ <delete id="deleArea">
+ delete from area where areaId=#{areaId}
+ </delete>
+ <update id="updateArea">
+ update area set areaName=#{areaName},areaLanuage=#{areaLanuage} where areaId=#{areaId}
+ </update>
+  <insert id="addArea">
+ insert into area values(null,#{areaName},#{areaLanuage})
+ </insert>
+    <!--  评论 -->
+ <resultMap id="resultMapForComment" type="com.etc.entity.Comment">
+    <id property="commentId" column="commentId"/>
+    <result property="userId" column="userId"/>
+    <result property="movieId" column="movieId"/>
+    <result property="commentContent" column="commentContent"/>
+    <result property="commentTime" column="commentTime"/>
+    <result property="userNickname" column="userNickname"/>
+    <result property="movieName" column="movieName"/>
+</resultMap>
+
+<resultMap type="com.etc.entity.Comment" id="resultMapForCommentAll1">
+	<id property="commentId" column="commentId"/>
+	<result property="commentContent" column="commentContent"/>
+    <result property="commentTime" column="commentTime"/>
+	<result property="movieName" column="movieName"/>
+	<result property="userNickname" column="userNickname"/>
+	
+</resultMap>
+
+ <select id="queryAllComment" resultMap="resultMapForComment">
+    select * from comments
+ </select>
+ 
+ <select id="queryCommentByMovie" resultMap="resultMapForCommentAll1">
+    select comments.commentId,users.userNickname,movie.movieName,comments.commentContent,comments.commentTime from comments inner join users inner join movie on comments.userId=users.userId and comments.movieId=movie.movieId where movie.movieName like "%"#{movieName}"%" order by commentTime desc
+ </select>
+ 
+ <select id="queryCommentById" resultMap="resultMapForComment">
+    select * from comments where commentId=#{commentId}
+ </select>
+ <delete id="deleComment">
+ delete from comments where commentId=#{commentId}
+ </delete>
+ <update id="updateComment">
+ update area set userId=#{userId},movieId=#{movieId},commentContent=#{commentContent},commentTime=#{commentTime} where commentId=#{commentId}
+ </update>
+  <insert id="addComment">
+ insert into area values(null,#{userId},#{movieId},#{commentContent},#{commentTime})
+ </insert>
+    <resultMap id="resultMapForDirector" type="com.etc.entity.Director">
+    <id property="directorId" column="directorId"/>
+    <result property="directorName" column="directorName"/>
+    <result property="directorImg" column="directorImg"/>
+       <!--  导演 -->
+</resultMap>
+ <select id="queryAllDirector" resultMap="resultMapForDirector">
+    select * from director
+ </select>
+ <select id="queryDirectorLike" resultMap="resultMapForDirector">
+    select * from director where directorName like "%"#{directorName}"%"
+ </select>
+ <select id="queryDirectorById" resultMap="resultMapForDirector">
+    select * from director where directorId=#{directorId}
+ </select>
+ <delete id="deleDirector">
+ delete from director where directorId=#{directorId}
+ </delete>
+ <update id="updateDirector">
+ update director set directorName=#{directorName},directorImg=#{directorImg} where directorId=#{directorId}
+ </update>
+  <insert id="addDirector">
+ insert into director values(null,#{directorName},#{directorImg})
+ </insert>
+     <resultMap id="resultMapForType" type="com.etc.entity.Type">
+    <id property="typeId" column="typeId"/>
+    <result property="typeName" column="typeName"/>
+   <!--  电影类型 -->
+</resultMap>
+ <select id="queryAllType" resultMap="resultMapForType">
+    select * from type
+  </select> 
+  <select id="queryTypeById" resultMap="resultMapForType">
+    select * from type where typeId=#{typeId}
+  </select>
+ <delete id="deleType">
+ delete from type where typeId=#{typeId}
+ </delete>
+ <update id="updateType">
+ update type set typeName=#{typeName} where typeId=#{typeId}
+ </update>
+  <insert id="addType">
+ insert into type values(null,#{typeName})
+ </insert>
+</mapper>

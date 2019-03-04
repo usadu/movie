@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- 指定接口文件位置 -->
+<mapper namespace="com.etc.dao.SelectMovieDao">
+
+ 
+ <resultMap id="resultMapForMovie" type="com.etc.entity.Movie">
+    <id property="movieId" column="movieId"/>
+    <result property="movieName" column="movieName"/>
+    <result property="directorId" column="directorId"/>
+    <result property="typeId" column="typeId"/>
+    <result property="datetime" column="datetime"/>
+    <result property="movieScore" column="movieScore"/>
+    <result property="movieIntroduction" column="movieIntroduction"/>
+    <result property="movieImg" column="movieImg"/>
+    <result property="movieTime" column="movieTime"/>
+    <result property="movieStatus" column="movieStatus"/>
+    <result property="areaId" column="areaId"/>
+    <result property="movieUrl" column="movieUrl"/>
+   
+</resultMap>
+<!-- 电影轮播 -->
+ <select id="queryAllMovies" resultMap="resultMapForMovie">
+    select * from movie 
+ </select>
+<!-- 电影精选 -->
+  <select id="selectionMovie" resultMap="resultMapForMovie">
+    select * from movie order by rand() limit 12
+ </select>
+ <!-- 热门电影 -->
+   <select id="hotMovie" resultMap="resultMapForMovie">
+    select * from movie order by rand() limit 6
+ </select>
+ <!-- 评分 -->
+    <select id="scoreMovie" resultMap="resultMapForMovie">
+    select * from movie order by movieScore desc limit 6
+ </select>
+  <!-- 最近添加 -->
+    <select id="newMovie" resultMap="resultMapForMovie">
+    select * from movie order by datetime desc limit 6
+ </select>
+ <!-- 模糊查询电影名 -->
+ <select id="queryMovieByLike" resultMap="resultMapForMovie">
+ select * from movie where movieName like "%"#{movieName}"%"
+ </select>
+ <!-- 电影精选分页 -->
+  <select id="selectionMovieByPage" resultMap="resultMapForMovie">
+    select * from movie 
+ </select>
+</mapper>

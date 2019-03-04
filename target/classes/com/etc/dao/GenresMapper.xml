@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!-- 指定接口文件位置 -->
+<mapper namespace="com.etc.dao.IGenresDao">
+
+ 
+ <resultMap id="typeMap" type="com.etc.entity.Type">
+    <id property="typeId" column="typeId"/>
+    <result property="typeName" column="typeName"/>
+   
+</resultMap>
+
+<resultMap id="areaMap" type="com.etc.entity.Area">
+    <id property="areaId" column="areaId"/>
+    <result property="areaName" column="areaName"/>
+    <result property="areaLanuage" column="areaLanuage"/>
+   
+</resultMap>
+
+<resultMap id="movieMap" type="com.etc.entity.Movie">
+    <id property="movieId" column="movieId"/>
+    <result property="movieName" column="movieName"/>
+    <result property="directorId" column="directorId"/>
+    <result property="typeId" column="typeId"/>
+    <result property="datetime" column="datetime"/>
+    <result property="movieScore" column="movieScore"/>
+    <result property="movieIntroduction" column="movieIntroduction"/>
+    <result property="movieImg" column="movieImg"/>
+    <result property="movieTime" column="movieTime"/>
+    <result property="movieStatus" column="movieStatus"/>
+    <result property="areaId" column="areaId"/>
+    <result property="movieUrl" column="movieUrl"/>
+   
+</resultMap>
+<!-- 查询全部电影类型 -->
+ <select id="selectType" resultMap="typeMap">
+    select * from type 
+ </select>
+ 
+<!--  查询全部地区 -->
+ <select id="selectArea" resultMap="areaMap">
+    select * from area 
+ </select>
+<!--  根据电影类型查询电影 -->
+ <select id="selectMovieByType" resultMap="movieMap">
+    select * from movie where typeId=#{typeId}
+ </select>
+<!--  根据地区查询电影 -->
+ <select id="selectMovieByArea" resultMap="movieMap">
+    select * from movie where areaId=#{areaId}
+ </select>
+<!--  多条件查询电影 -->
+ <select id="selectMovieByMore" resultMap="movieMap">
+  select * from movie
+  <where> 
+    <if test="typeId != -1">
+         and typeId = #{typeId}
+    </if> 
+    <if test="areaId != -1">
+         and areaId = #{areaId}
+    </if>
+    <if test="movieStatus != -1">
+         and movieStatus = #{movieStatus}
+    </if>
+   	<if test="datetime == 1">
+      and datetime between '1949-10-01' and '2016-01-01'
+    </if>
+    <if test="datetime != -1 and datetime != 1">
+      and datetime like "%"#{datetime}"%"
+    </if>
+  </where>
+</select>
+
+
+ <select id="selectMovie" resultMap="movieMap">
+  select * from movie where  movieName like "%"#{movieName}"%"
+</select>
+</mapper>

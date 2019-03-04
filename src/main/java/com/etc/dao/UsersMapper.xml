@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  
+  <!-- namespaces属性指定xml对应哪个接口的实现类-->
+<mapper namespace="com.etc.dao.IUsersDao">
+	<!-- 登录用户 -->
+  <resultMap type="com.etc.entity.Users" id="resultMapForLogin"  >
+		<id  property="userId" column="userId"/>
+		<result property="userImg" column="userImg"/>
+		<result property="userName" column="userName"/>
+		<result property="userPwd" column="userPwd"/>
+		<result property="userNickname" column="userNickname"/>
+		<result property="userSex" column="userSex"/>
+		<result property="userStatus" column="userStatus"/>
+		<result property="vipTime" column="vipTime"/>
+		
+
+</resultMap>
+
+  <select id="login" resultMap="resultMapForLogin">
+		select * from users where userName=#{userName} and userPwd=#{userPwd}
+  </select>
+  
+  <!--注册用户  -->
+  <insert id="addUser">
+     insert into users values(null,null,#{userName},#{userPwd},#{userNickname},#{userSex},0,null)
+  </insert>
+  
+  	<!-- 查询注册时用户名是否重复 -->
+  <resultMap type="com.etc.entity.Users" id="resultMapForUserName"  >
+		<id  property="userId" column="userId"/>
+		<result property="userImg" column="userImg"/>
+		<result property="userName" column="userName"/>
+		<result property="userPwd" column="userPwd"/>
+		<result property="userNickname" column="userNickname"/>
+		<result property="userSex" column="userSex"/>
+		<result property="userStatus" column="userStatus"/>
+		<result property="vipTime" column="vipTime"/>
+		
+
+</resultMap>
+
+  <select id="queryByName" resultMap="resultMapForUserName">
+		select * from users where userName=#{userName} 
+  </select>
+  
+  <!--用户信息修改  -->
+  
+  
+  <update id="updateUser">
+   update users set userImg=#{userImg},userName=#{userName},userPwd=#{userPwd},userNickname=#{userNickname},userSex=#{userSex},userStatus=#{userStatus} where userId=#{userId}
+  </update>
+  
+  <update id="updateVipTime">
+   update users set vipTime=#{vipTime},userStatus=1 where userId=#{userId}
+  </update>
+</mapper>
